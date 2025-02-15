@@ -11,13 +11,19 @@
     <link type="image/x-icon" href="/favicon.ico" rel="icon">
 
     <link href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
-        crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js" integrity="sha256-lSjKY0/srUM9BE3dPm+c4fBo1dky2v27Gdjm2uoZaL0="
-        crossorigin="anonymous"></script>
+    <script type="module" src="https://code.jquery.com/jquery-3.6.4.min.js"
+        integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <script type="module" src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"
+        integrity="sha256-lSjKY0/srUM9BE3dPm+c4fBo1dky2v27Gdjm2uoZaL0=" crossorigin="anonymous"></script>
     <link href="/bootstrap/light.css" rel="stylesheet">
     <link href="/bootstrap/dark.css" rel="stylesheet" id="custom-css">
-    <script src="/apply-theme.js"></script>
+    <script type="module" src="/scripts/apply-theme.js"></script>
+
+    <style type="text/css">
+        .custom-popover {
+            width: 250px;
+        }
+    </style>
 </head>
 
 <body>
@@ -26,6 +32,24 @@
             <a class="navbar-brand ms-1 py-0" id="logo" href="/">
                 <span class="logo-prefix">QB</span><span class="logo-suffix">Reader</span>
             </a>
+            <style>
+                #logo {
+                    font-family: Inter, 'Source Sans Pro', sans-serif;
+                    font-size: 1.5rem;
+                    font-weight: bold;
+                    text-decoration-line: none;
+                }
+
+                .logo-prefix {
+                    background: linear-gradient(160deg, #cc0000 30%, #cc0000 47.5%, #e9ba00 47.5%, #e9ba00 52.5%, #cc0000 52.5%, #cc0000 70%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                }
+
+                .logo-suffix {
+                    color: #000000;
+                }
+            </style>
             <button class="navbar-toggler" data-bs-target="#navbarSupportedContent" data-bs-toggle="collapse" type="button"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -33,10 +57,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="/tossups">Tossups</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/bonuses">Bonuses</a>
+                        <a class="nav-link" href="/singleplayer">Singleplayer</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" href="/multiplayer" aria-current="page">Multiplayer</a>
@@ -45,18 +66,25 @@
                         <a class="nav-link" href="/db">Database</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="/frequency-list">Frequency List</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/geoword">Geoword</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="/api-docs">API</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/about">About</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/settings">Settings</a>
+                    </li>
                 </ul>
                 <div class="d-flex">
                     <ul class="navbar-nav mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link p-1" id="toggle-dark-mode" href="#">
-                                <img src="/dark-mode.png" width="28" height="28">
-                            </a>
+                            <a class="nav-link" href="/user/login" id="login-link">Log in</a>
                         </li>
                     </ul>
                 </div>
@@ -64,101 +92,155 @@
         </div>
     </nav>
 
-    <div class="container-fluid mt-1 mt-lg-3 mb-5 pb-5 px-xxl-5">
-        <div class="row" id="info">
-            <div class="options col-12 col-lg-3 col-xxl-2 d-lg-block order-lg-1 mb-5" id="options">
-                <div class="accordion" id="player-accordion"></div>
-                <hr>
-                <div class="form-floating mb-1">
-                    <input class="form-control" id="username" type="text" placeholder="Username">
-                    <label for="username">Username</label>
-                </div>
-                <div id="difficulty-settings">
-                    <div class="form-floating">
-                        <input class="form-control" id="difficulties" type="text" placeholder="Difficulties">
-                        <label for="difficulties">Difficulties</label>
-                    </div>
-                    <p class="mt-2">
-                        1 - Middle School, 2 to 5 - High School, 6 to 9 - College, 10 - Open
-                    </p>
-                    <section>
-                        Year range:
-                        <span class="sliderValue0" id="year-range-a">2010</span>
-                        -
-                        <span class="sliderValue1" id="year-range-b">2023</span>
-                        <div id="slider"></div>
-                    </section>
-                </div>
-                <div class="mb-2 d-none" id="set-settings">
-                    <div class="form-floating">
-                        <input class="form-control" id="set-name" type="text" list="set-list">
-                        <label for="set-name">Set Name</label>
-                        <datalist id="set-list"></datalist>
-                    </div>
-                    <div class="my-1"></div>
-                    <div class="form-floating">
-                        <input class="form-control" id="packet-number" type="text">
-                        <label for="packet-number">Packet Numbers</label>
-                    </div>
-                </div>
-                <label for="reading-speed">Reading speed: <span id="reading-speed-display">50</span><br></label>
-                <input class="form-range" id="reading-speed" type="range" min="0" max="100" step="5">
-                <label for="font-size">Font size: <span id="font-size-display">16</span>px</label>
-                <input class="form-range" id="font-size" type="range" value="16" min="10" max="30" step="1">
-                <div class="text-center mb-2">
-                    <button class="btn btn-danger" id="category-select-button" data-bs-target="#category-modal" data-bs-toggle="modal"
-                        type="button">Categories</button>
-                    <button class="btn btn-warning" id="clear-stats" type="button">Clear Stats</button>
-                </div>
-                <div class="form-check form-switch">
-                    <input class="form-check-input" id="toggle-high-contrast-question-text" type="checkbox" role="switch">
-                    <label class="form-check-label" for="toggle-high-contrast-question-text">High contrast text</label>
-                </div>
-                <div class="form-check form-switch">
-                    <input class="form-check-input" id="toggle-visibility" type="checkbox" value role="switch" checked>
-                    <label class="form-check-label" for="toggle-visibility">Public room</label>
-                </div>
-                <p class="mb-1 text-muted" id="private-chat-warning">Note: chat is only available for private rooms.</p>
-                <div class="form-check form-switch">
-                    <input class="form-check-input" id="toggle-rebuzz" type="checkbox" value role="switch">
-                    <label class="form-check-label" for="toggle-rebuzz">Allow rebuzzes</label>
-                </div>
-                <div class="form-check form-switch">
-                    <input class="form-check-input" id="toggle-select-by-set-name" type="checkbox" value role="switch">
-                    <label class="form-check-label" for="toggle-select-by-set-name">Select by set name</label>
+    <div class="container-fluid mt-3 mb-5 pb-5 px-xxl-5">
+        <div class="toast-container position-fixed top-0 end-0 p-3">
+            <div id="star-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <strong class="me-auto">You must be logged in to star questions.</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
             </div>
-            <div class="col-12 col-lg-9 col-xxl-10">
-                <div class="buttons position-sticky top-0 pt-2">
-                    <button class="mb-2 btn btn-primary" id="next" data-bs-placement="top" data-bs-toggle="tooltip" type="button"
-                        title="Shortcut: s or n key">Next</button>
-                    <button class="mb-2 btn btn-primary" id="pause" data-bs-placement="top" data-bs-toggle="tooltip" type="button"
-                        title="Shortcut: p key" disabled>Pause</button>
-                    <button class="mb-2 btn btn-info" id="chat" data-bs-placement="top" data-bs-toggle="tooltip" type="button"
-                        title="Shortcut: enter key">Chat</button>
-                    <button class="mb-2 btn btn-danger d-lg-none" id="toggle-options" type="button">Options</button>
-                    <button class="mb-2 btn btn-primary float-end" id="buzz" data-bs-placement="top" data-bs-toggle="tooltip"
-                        type="button" title="Shortcut: spacebar" disabled>Buzz</button>
-                    <form id="answer-form">
-                        <!-- User enters answer here -->
-                        <div class="input-group d-none my-2" id="answer-input-group">
-                            <input class="form-control" id="answer-input" type="text" placeholder="Enter answer">
-                            <button class="btn btn-success" id="answer-submit" type="submit">Submit</button>
-                        </div>
-                    </form>
-                    <form id="chat-form">
-                        <div class="input-group d-none my-2" id="chat-input-group">
-                            <input class="form-control" id="chat-input" type="text" placeholder="Chat">
-                            <button class="btn btn-success" id="chat-submit" type="submit">Submit</button>
-                        </div>
-                    </form>
+        </div>
+        <div class="toast-container position-fixed top-0 end-0 p-3">
+            <div id="funny-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header" style="background-color: yellow;">
+                    <h1 id="funny-toast-text" class="me-auto text-danger"></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="d-lg-block col-12 col-lg-3 order-lg-1 mb-5" id="settings">
+                <div class="timer d-block p-1 text-center" id="timer">
+                    <span class="face">10</span><span class="fraction">.0</span>
+                </div>
+                <hr>
+                <div class="form-check form-switch mb-2">
+                    <input class="form-check-input" id="toggle-offline-players" type="checkbox" role="switch">
+                    <label class="form-check-label" for="toggle-offline-players">Show offline players</label>
+                </div>
+                <ul class="list-group" id="player-list-group"></ul>
+                <hr>
+                <label class="form-check-label mb-1" for="set-mode">Choose a mode:</label>
+                <select class="form-select mb-2" id="set-mode">
+                    <option value="select by set name">Select by Set Name</option>
+                    <option value="random questions" selected>Random Questions</option>
+                </select>
+                <div class="input-group mb-2">
+                    <span class="input-group-text" data-bs-placement="left" data-bs-toggle="tooltip" title="Username">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill"
+                            viewBox="0 0 16 16">
+                            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+                        </svg>
+                    </span>
+                    <input class="form-control" id="username" type="text" placeholder="Username">
+                </div>
+                <div class="d-none" id="set-settings">
+                    <div class="input-group mb-2">
+                        <span class="input-group-text">Set Name</span>
+                        <input class="form-control" id="set-name" type="text" list="set-list">
+                        <datalist id="set-list"></datalist>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Packet #</span>
+                        <input class="form-control" id="packet-number" type="text" placeholder="Packet Numbers">
+                    </div>
+                    <div class="form-floating">
+                    </div>
+                </div>
+                <div id="difficulty-settings">
+                    <div class="mb-2" id="difficulty-dropdown-root"></div>
+                    <section>
+                        Year range: <span class="sliderValue0" id="year-range-a">2010</span> - <span class="sliderValue1"
+                            id="year-range-b">2024</span>
+                        <div id="slider"></div>
+                        <div class="alert small-alert alert-danger" role="alert" id="yearRangeAlert" style="display: none">
+                            Invalid input. Years must be after or during each other to update.
+                        </div>
+                    </section>
+                </div>
+                <div class="mt-2" id="general-settings">
+                    <div class="text-center mb-2">
+                        <button class="btn btn-danger" id="category-select-button" data-bs-target="#category-modal"
+                            data-bs-toggle="modal" type="button">Categories</button>
+                        <button class="btn btn-warning" id="clear-stats" type="button">Clear Stats</button>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" id="toggle-powermark-only" type="checkbox" role="switch">
+                        <label class="form-check-label" for="toggle-powermark-only">Powermarked tossups only</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" id="toggle-standard-only" type="checkbox" role="switch">
+                        <label class="form-check-label" for="toggle-standard-only">Standard format only</label>
+                    </div>
+                    <hr>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" id="toggle-public" type="checkbox" role="switch">
+                        <label class="form-check-label" for="toggle-public">Public room</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" id="toggle-controlled" type="checkbox" role="switch">
+                        <label class="form-check-label" for="toggle-controlled">Controlled room</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" id="toggle-rebuzz" type="checkbox" role="switch">
+                        <label class="form-check-label" for="toggle-rebuzz">Allow rebuzzes</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" id="toggle-skip" type="checkbox" role="switch">
+                        <label class="form-check-label" for="toggle-skip">Allow skips</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" id="toggle-timer" type="checkbox" role="switch" checked>
+                        <label class="form-check-label" for="toggle-timer">Enable timer</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" id="toggle-lock" type="checkbox" role="switch">
+                        <label class="form-check-label" for="toggle-lock">Lock room from new players</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" id="toggle-login-required" type="checkbox" role="switch">
+                        <label class="form-check-label" for="toggle-login-required">Require new players to be logged in</label>
+                    </div>
+                    <div class="mb-2"></div>
+                    <label for="reading-speed">Reading speed: <span id="reading-speed-display">50</span><br></label>
+                    <input class="form-range" id="reading-speed" type="range" min="0" max="100" step="5">
+                    <label for="set-strictness">Strictness: <span id="strictness-display">7</span><br></label>
+                    <input class="form-range" id="set-strictness" type="range" min="0" max="20" step="1" value="7">
+                    <div>
+                        View more settings <a href="/settings">here</a>.
+                    </div>
+                    <p class="mb-1 text-muted">
+                        <i id="private-chat-warning">Chat is disabled in public rooms.</i>
+                        <i class="d-none" id="permanent-room-warning">This is a permanent room. Some settings have been restricted.</i>
+                        <i class="d-none" id="controlled-room-warning">
+                            This is a controlled room. Some settings can only be edited by the creator.
+                        </i>
+                    </p>
+                </div>
+            </div>
+            <div class="col-12 col-lg-9" id="content">
+                <form id="answer-form">
+                    <!-- User enters answer here -->
+                    <div class="input-group d-none my-2" id="answer-input-group">
+                        <input class="form-control" id="answer-input" type="text" placeholder="Enter answer" autocomplete="off"
+                            maxlength="256">
+                        <button class="btn btn-success" id="answer-submit" type="submit">Submit</button>
+                    </div>
+                </form>
+                <form id="chat-form">
+                    <div class="input-group d-none my-2" id="chat-input-group">
+                        <input class="form-control" id="chat-input" type="text" placeholder="Chat" maxlength="256">
+                        <button class="btn btn-success" id="chat-submit" type="submit">Submit</button>
+                    </div>
+                </form>
                 <div class="float-row">
                     <span class="float-end ps-5 me-lg-2" id="question-metadata">
                         <b id="question-info">
                             <span id="set-name-info"></span>
-                            Packet <span id="packet-number-info"></span>
-                            Question <span id="question-number-info"></span>
+                            Packet <span id="packet-number-info">-</span>
+                            Question <span id="question-number-info">-</span>
+                            of <span id="packet-length-info">-</span>
                         </b>
                     </span>
                 </div>
@@ -168,139 +250,36 @@
             </div>
         </div>
     </div>
-
-    <div class="modal" id="category-modal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Select Categories and Subcategories</h5>
-                    <button class="btn-close" data-bs-dismiss="modal" type="button" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-6" id="categories">
-                            <h5 class="text-center">Categories</h5>
-                            <input class="btn-check" id="Literature" type="checkbox" autocomplete="off">
-                            <label class="btn btn-outline-primary w-100 rounded-0 my-1" for="Literature">Literature<br></label>
-
-                            <input class="btn-check" id="History" type="checkbox" autocomplete="off">
-                            <label class="btn btn-outline-success w-100 rounded-0 my-1" for="History">History<br></label>
-
-                            <input class="btn-check" id="Science" type="checkbox" autocomplete="off">
-                            <label class="btn btn-outline-danger w-100 rounded-0 my-1" for="Science">Science<br></label>
-
-                            <input class="btn-check" id="Fine Arts" type="checkbox" autocomplete="off">
-                            <label class="btn btn-outline-warning w-100 rounded-0 my-1" for="Fine Arts">Fine
-                                Arts<br></label>
-
-                            <input class="btn-check" id="Religion" type="checkbox" autocomplete="off">
-                            <label class="btn btn-outline-secondary w-100 rounded-0 my-1" for="Religion">Religion<br></label>
-
-                            <input class="btn-check" id="Mythology" type="checkbox" autocomplete="off">
-                            <label class="btn btn-outline-secondary w-100 rounded-0 my-1" for="Mythology">Mythology<br></label>
-
-                            <input class="btn-check" id="Philosophy" type="checkbox" autocomplete="off">
-                            <label class="btn btn-outline-secondary w-100 rounded-0 my-1" for="Philosophy">Philosophy<br></label>
-
-                            <input class="btn-check" id="Social Science" type="checkbox" autocomplete="off">
-                            <label class="btn btn-outline-secondary w-100 rounded-0 my-1" for="Social Science">Social
-                                Science<br></label>
-
-                            <input class="btn-check" id="Current Events" type="checkbox" autocomplete="off">
-                            <label class="btn btn-outline-secondary w-100 rounded-0 my-1" for="Current Events">Current
-                                Events<br></label>
-
-                            <input class="btn-check" id="Geography" type="checkbox" autocomplete="off">
-                            <label class="btn btn-outline-secondary w-100 rounded-0 my-1" for="Geography">Geography<br></label>
-
-                            <input class="btn-check" id="Other Academic" type="checkbox" autocomplete="off">
-                            <label class="btn btn-outline-secondary w-100 rounded-0 my-1" for="Other Academic">Other
-                                Academic<br></label>
-
-                            <input class="btn-check" id="Trash" type="checkbox" autocomplete="off">
-                            <label class="btn btn-outline-secondary w-100 rounded-0 my-1" for="Trash">Trash<br></label>
-                        </div>
-                        <div class="col-6" id="subcategories">
-                            <h5 class="text-center">Subcategories</h5>
-                            <input class="btn-check" id="American Literature" type="checkbox" autocomplete="off">
-                            <label class="btn btn-outline-primary w-100 rounded-0 my-1" for="American Literature">American
-                                Literature<br></label>
-
-                            <input class="btn-check" id="British Literature" type="checkbox" autocomplete="off">
-                            <label class="btn btn-outline-primary w-100 rounded-0 my-1" for="British Literature">British
-                                Literature<br></label>
-
-                            <input class="btn-check" id="Classical Literature" type="checkbox" autocomplete="off">
-                            <label class="btn btn-outline-primary w-100 rounded-0 my-1" for="Classical Literature">Classical
-                                Literature<br></label>
-
-                            <input class="btn-check" id="European Literature" type="checkbox" autocomplete="off">
-                            <label class="btn btn-outline-primary w-100 rounded-0 my-1" for="European Literature">European
-                                Literature<br></label>
-
-                            <input class="btn-check" id="World Literature" type="checkbox" autocomplete="off">
-                            <label class="btn btn-outline-primary w-100 rounded-0 my-1" for="World Literature">World
-                                Literature<br></label>
-
-                            <input class="btn-check" id="Other Literature" type="checkbox" autocomplete="off">
-                            <label class="btn btn-outline-primary w-100 rounded-0 my-1" for="Other Literature">Other
-                                Literature<br></label>
-
-                            <input class="btn-check" id="American History" type="checkbox" autocomplete="off">
-                            <label class="btn btn-outline-success w-100 rounded-0 my-1" for="American History">American
-                                History <br></label>
-
-                            <input class="btn-check" id="Ancient History" type="checkbox" autocomplete="off">
-                            <label class="btn btn-outline-success w-100 rounded-0 my-1" for="Ancient History">Ancient
-                                History<br></label>
-
-                            <input class="btn-check" id="European History" type="checkbox" autocomplete="off">
-                            <label class="btn btn-outline-success w-100 rounded-0 my-1" for="European History">European
-                                History<br></label>
-
-                            <input class="btn-check" id="World History" type="checkbox" autocomplete="off">
-                            <label class="btn btn-outline-success w-100 rounded-0 my-1" for="World History">World
-                                History<br></label>
-
-                            <input class="btn-check" id="Other History" type="checkbox" autocomplete="off">
-                            <label class="btn btn-outline-success w-100 rounded-0 my-1" for="Other History">Other
-                                History<br></label>
-
-                            <input class="btn-check" id="Biology" type="checkbox" autocomplete="off">
-                            <label class="btn btn-outline-danger w-100 rounded-0 my-1" for="Biology">Biology<br></label>
-
-                            <input class="btn-check" id="Chemistry" type="checkbox" autocomplete="off">
-                            <label class="btn btn-outline-danger w-100 rounded-0 my-1" for="Chemistry">Chemistry<br></label>
-
-                            <input class="btn-check" id="Physics" type="checkbox" autocomplete="off">
-                            <label class="btn btn-outline-danger w-100 rounded-0 my-1" for="Physics">Physics<br></label>
-
-                            <input class="btn-check" id="Math" type="checkbox" autocomplete="off">
-                            <label class="btn btn-outline-danger w-100 rounded-0 my-1" for="Math">Math<br></label>
-
-                            <input class="btn-check" id="Other Science" type="checkbox" autocomplete="off">
-                            <label class="btn btn-outline-danger w-100 rounded-0 my-1" for="Other Science">Other
-                                Science<br></label>
-
-                            <input class="btn-check" id="Visual Fine Arts" type="checkbox" autocomplete="off">
-                            <label class="btn btn-outline-warning w-100 rounded-0 my-1" for="Visual Fine Arts">Visual
-                                Fine Arts<br></label>
-
-                            <input class="btn-check" id="Auditory Fine Arts" type="checkbox" autocomplete="off">
-                            <label class="btn btn-outline-warning w-100 rounded-0 my-1" for="Auditory Fine Arts">Auditory Fine
-                                Arts<br></label>
-
-                            <input class="btn-check" id="Other Fine Arts" type="checkbox" autocomplete="off">
-                            <label class="btn btn-outline-warning w-100 rounded-0 my-1" for="Other Fine Arts">Other Fine
-                                Arts<br></label>
-                        </div>
+    <div class="container-fluid px-xxl-5 position-fixed bottom-0">
+        <div class="row">
+            <div class="col-12 col-lg-9 py-3 bg-body" id="buttons">
+                <button class="btn btn-primary" id="next" data-bs-placement="top" data-bs-toggle="tooltip" type="button"
+                    title="Shortcut: n or s key">Next</button>
+                <button class="btn btn-primary d-none" id="skip" data-bs-placement="top" data-bs-toggle="tooltip" type="button"
+                    title="Shortcut: n key" disabled>Skip</button>
+                <button class="btn btn-primary" id="pause" data-bs-placement="top" data-bs-toggle="tooltip" type="button"
+                    title="Shortcut: p key" disabled>Pause</button>
+                <button class="btn btn-info" id="chat" data-bs-placement="top" data-bs-toggle="tooltip" type="button"
+                    title="Shortcut: enter key">Chat</button>
+                <button class="btn btn-danger" id="toggle-settings" data-bs-placement="top" data-bs-toggle="tooltip" type="button"
+                    title="Shortcut: e key" type="button">
+                    <div class="d-flex align-items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-gear"
+                            viewBox="0 0 16 16">
+                            <path
+                                d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0" />
+                            <path
+                                d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z" />
+                        </svg>
                     </div>
-                </div>
-                <div class="modal-footer">
-                </div>
+                </button>
+                <button class="btn btn-primary float-end" id="buzz" data-bs-placement="top" data-bs-toggle="tooltip" type="button"
+                    title="Shortcut: spacebar" disabled>Buzz</button>
             </div>
         </div>
     </div>
+
+    <div id="category-modal-root"></div>
 
     <div class="modal" id="report-question-modal" tabindex="-2">
         <div class="modal-dialog">
@@ -341,14 +320,15 @@
         </div>
     </div>
 
-    <script src="/bootstrap/bootstrap.bundle.min.js"></script>
-    <script src="/script.js"></script>
+    <script type="module" src="/bootstrap/bootstrap.bundle.min.js"></script>
+    <script type="module" src="/script.js"></script>
 
-    <script src="/utilities.js"></script>
-    <script src="/readers.js"></script>
-    <script src="/multiplayer/room.js"></script>
+    <script type="module" src="/scripts/readers.js"></script>
+    <script type="module" src="/scripts/dual-slider.js"></script>
 
-    <script src="/dual-slider.js"></script>
+    <script type="module" src="/react/umd/react.production.min.js"></script>
+    <script type="module" src="/react-dom/umd/react-dom.production.min.js"></script>
+    <script type="module" src="/multiplayer/room.min.js"></script>
 </body>
 
 </html>

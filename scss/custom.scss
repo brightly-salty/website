@@ -6,11 +6,17 @@
 $font-family-sans-serif: Helvetica, sans-serif;
 $link-decoration: none;
 
+$popover-body-padding-y: 0;
+$popover-body-padding-x: 0;
+$popover-max-width: 100%;
+
 // 6. Optionally include any other parts as needed
 @import url(https://cdn.jsdelivr.net/npm/firacode@6.2.0/distr/fira_code.css); // Fira Code font
 
-@import "../node_modules/bootstrap/scss/accordion";
+@import "../node_modules/bootstrap/scss/alert";
+@import "../node_modules/bootstrap/scss/badge";
 @import "../node_modules/bootstrap/scss/buttons";
+@import "../node_modules/bootstrap/scss/button-group";
 @import "../node_modules/bootstrap/scss/card";
 @import "../node_modules/bootstrap/scss/close";
 @import "../node_modules/bootstrap/scss/containers";
@@ -22,8 +28,10 @@ $link-decoration: none;
 @import "../node_modules/bootstrap/scss/nav";
 @import "../node_modules/bootstrap/scss/navbar";
 @import "../node_modules/bootstrap/scss/pagination";
+@import "../node_modules/bootstrap/scss/popover";
 @import "../node_modules/bootstrap/scss/reboot";
 @import "../node_modules/bootstrap/scss/spinners";
+@import "../node_modules/bootstrap/scss/tables";
 @import "../node_modules/bootstrap/scss/toasts";
 @import "../node_modules/bootstrap/scss/tooltip";
 @import "../node_modules/bootstrap/scss/transitions";
@@ -35,6 +43,16 @@ $link-decoration: none;
 
 // 8. Add additional custom code here
 
+code {
+    font-family: 'Fira Code', monospace;
+}
+
+@supports (font-variation-settings: normal) {
+    code {
+        font-family: 'Fira Code VF', monospace;
+    }
+}
+
 .bg-custom {
     background-color: $custom;
 }
@@ -45,11 +63,7 @@ $link-decoration: none;
     margin-bottom: .5em;
 }
 
-.card-header {
-    cursor: pointer;
-}
-
-.download-link {
+.clickable {
     cursor: pointer;
 }
 
@@ -65,18 +79,6 @@ $link-decoration: none;
     font-size: 20px;
 }
 
-#logo {
-    font-family: Inter, 'Source Sans Pro', sans-serif;
-    font-size: 1.5rem;
-    font-weight: bold;
-}
-
-code { font-family: 'Fira Code', monospace; }
-
-@supports (font-variation-settings: normal) {
-  code { font-family: 'Fira Code VF', monospace; }
-}
-
 .logo-prefix {
     color: $logo-prefix-color;
 }
@@ -89,9 +91,44 @@ code { font-family: 'Fira Code', monospace; }
     border-top: .5px solid lightgray;
 }
 
+.small-alert {
+    --bs-alert-padding-y: 0.5rem;
+}
+
 .text-highlight {
     background-color: #f8ff00;
     color: $dark;
 }
 
+.timer .fraction {
+    font-size: 50%;
+}
+
+.user-score {
+    background-color: $user-score-background;
+}
+
+a.list-group-item:hover {
+    color: inherit;
+}
+
+#difficulty-settings {
+    min-height: 90px;
+}
+
+#logo {
+    font-family: Inter, 'Source Sans Pro', sans-serif;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+#multiplayer-name {
+    margin-top: 3px
+}
+
+#set-settings {
+    min-height: 90px;
+}
+
 @import "./dual-slider";
+@import "./dropdown-checklist";

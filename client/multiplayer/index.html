@@ -12,7 +12,7 @@
 
     <link href="/bootstrap/light.css" rel="stylesheet">
     <link href="/bootstrap/dark.css" rel="stylesheet" id="custom-css">
-    <script src="/apply-theme.js"></script>
+    <script type="module" src="/scripts/apply-theme.js"></script>
 </head>
 
 <body>
@@ -21,6 +21,24 @@
             <a class="navbar-brand ms-1 py-0" id="logo" href="/">
                 <span class="logo-prefix">QB</span><span class="logo-suffix">Reader</span>
             </a>
+            <style>
+                #logo {
+                    font-family: Inter, 'Source Sans Pro', sans-serif;
+                    font-size: 1.5rem;
+                    font-weight: bold;
+                    text-decoration-line: none;
+                }
+
+                .logo-prefix {
+                    background: linear-gradient(160deg, #cc0000 30%, #cc0000 47.5%, #e9ba00 47.5%, #e9ba00 52.5%, #cc0000 52.5%, #cc0000 70%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                }
+
+                .logo-suffix {
+                    color: #000000;
+                }
+            </style>
             <button class="navbar-toggler" data-bs-target="#navbarSupportedContent" data-bs-toggle="collapse" type="button"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -28,10 +46,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="/tossups" aria-current="page">Tossups</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/bonuses">Bonuses</a>
+                        <a class="nav-link" href="/singleplayer">Singleplayer</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" href="/multiplayer">Multiplayer</a>
@@ -40,18 +55,25 @@
                         <a class="nav-link" href="/db">Database</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="/frequency-list">Frequency List</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/geoword">Geoword</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="/api-docs">API</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/about">About</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/settings">Settings</a>
+                    </li>
                 </ul>
                 <div class="d-flex">
                     <ul class="navbar-nav mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link p-1" id="toggle-dark-mode" href="#">
-                                <img src="/dark-mode.png" width="28" height="28">
-                            </a>
+                            <a class="nav-link" href="/user/login" id="login-link">Log in</a>
                         </li>
                     </ul>
                 </div>
@@ -60,30 +82,52 @@
     </nav>
 
     <div class="container mt-3 mb-4">
-        <div class="row">
-            <div class="col-12">
-                <p class="lead">Play quizbowl real-time against other players.</p>
-                <p>You can invite friends to join you by sharing the URL to your room.</p>
-                <p>Create/Join a Room:</p>
-                <form id="form">
-                    <div class="input-group">
-                        <input class="form-control" id="new-room-name" type="text">
-                        <button class="btn btn-success" type="submit">Go</button>
-                    </div>
-                </form>
-                <hr>
-                <p>Try one of these rooms:</p>
-                <ul class="list-group mb-3" id="permanent-room-list"></ul>
-                <p>Or, check out a public room:</p>
-                <ul class="list-group mb-5" id="room-list"></ul>
+        <p class="lead">Play quizbowl real-time against other players.</p>
+        <p>
+            You can invite friends to join you by sharing the URL to your room.
+            There are <span id="active-players"></span> active players in <span id="active-rooms"></span> active rooms.
+        </p>
+        <p>
+            Settings in controlled rooms can only be changed by the room creator.
+        </p>
+        <p class="mb-0 pb-2">Create/Join a Room:</p>
+        <form id="form">
+            <div class="input-group justify-content-center pb-2">
+                <input class="form-control" id="new-room-name" type="text">
+                <button class="btn btn-success" type="submit">Go</button>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" id="private-room-checkbox" type="checkbox">
+                <label class="form-check-label" for="private-room-checkbox">
+                    Make room private
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" id="controlled-room-checkbox" type="checkbox">
+                <label class="form-check-label" for="controlled-room-checkbox">
+                    Make room controlled
+                </label>
+            </div>
+        </form>
+        <hr>
+        <p>Try one of these rooms:</p>
+        <ul class="list-group mb-3" id="permanent-room-list"></ul>
+        <div class="d-flex justify-content-between mb-3">
+            <div>Or, check out a public room:</div>
+            <div class="form-check">
+                <input class="form-check-input" id="empty-room-checkbox" type="checkbox">
+                <label class="form-check-label" for="empty-room-checkbox">
+                    Show empty rooms
+                </label>
             </div>
         </div>
+        <ul class="list-group mb-5" id="room-list"></ul>
     </div>
 
-    <script src="/bootstrap/bootstrap.bundle.min.js"></script>
-    <script src="/script.js"></script>
+    <script type="module" src="/bootstrap/bootstrap.bundle.min.js"></script>
+    <script type="module" src="/script.js"></script>
 
-    <script src="/multiplayer/index.js"></script>
+    <script type="module" src="/multiplayer/index.js"></script>
 </body>
 
 </html>
